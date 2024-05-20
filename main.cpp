@@ -1,24 +1,33 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-bool validIndex(sf::Sprite character)
+bool validIndex(sf::Sprite& character)
 {
     sf::Vector2f tempVec = character.getPosition();
-    float x = tempVec.x + 1.f;
-    float y = tempVec.y + 1.f;
-
-    if(x < 0 || x > 800)
+    float x = tempVec.x;
+    float y = tempVec.y;
+    if(x < 0)
     {
+        character.setPosition(sf::Vector2f(x+1, y));
         return false;
     }
-    
-    if(y < 0 || y > 600)
+    if(x > 800 - character.getGlobalBounds().width)
     {
+        character.setPosition(sf::Vector2f(x-1, y));
         return false;
     }
 
+    if(y < 0)
+    {
+        character.setPosition(sf::Vector2f(x, y+1));
+        return false;
+    }
+    if(y > 600 - character.getGlobalBounds().height)
+    {
+        character.setPosition(sf::Vector2f(x, y-1));
+        return false;
+    }
     return true;
-
 }
 
 int main()
