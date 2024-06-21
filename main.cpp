@@ -1,37 +1,27 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Entity.hpp"
+#include "Player.hpp"
+#include "Enemy.hpp"
+#include "Movement.hpp"
 
-bool validIndex(sf::Sprite& character)
-{
-    sf::Vector2f tempVec = character.getPosition();
-    float x = tempVec.x;
-    float y = tempVec.y;
-    if(x < 0)
-    {
-        character.setPosition(sf::Vector2f(x+1, y));
-        return false;
-    }
-    if(x > 800 - character.getGlobalBounds().width)
-    {
-        character.setPosition(sf::Vector2f(x-1, y));
-        return false;
-    }
-
-    if(y < 0)
-    {
-        character.setPosition(sf::Vector2f(x, y+1));
-        return false;
-    }
-    if(y > 600 - character.getGlobalBounds().height)
-    {
-        character.setPosition(sf::Vector2f(x, y-1));
-        return false;
-    }
-    return true;
-}
 
 int main()
 {
+
+    Player player1("Mateo", Mage, 100);
+    Enemy* enemy1 = new Enemy("enemy1",Mage);
+
+    cout << player1.getHealth() << endl;
+    cout << enemy1->getHealth() << endl;
+
+    cout << player1.getDamage() << endl;
+    cout << enemy1->getDamage() << endl;
+
+    player1.attack(player1,*enemy1);
+
+    cout << player1.getHealth() << endl;
+    cout << enemy1->getHealth() << endl;
     // create the window
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
@@ -41,7 +31,8 @@ int main()
     sf::Texture playerTexture;
     sf::Sprite character;
 
-    if(playerTexture.loadFromFile("C:\\Users\\mateo\\Documents\\Game1\\assests\\Players\\Textures\\Mock-Sprite.png"))
+
+    if(playerTexture.loadFromFile("assests/Players/Textures/Mock-Sprite.png"))
     {
         std::cout << "Player image Loaded!" << std::endl;
         character.setTexture(playerTexture);
@@ -50,8 +41,30 @@ int main()
     {
        std::cout << "Player image failed to load!" << std::endl;
     }
+
+    sf::Texture enemyTexture;
+    sf::Sprite enemy;
+
+
+    if(enemyTexture.loadFromFile("assests/Players/Textures/Enemy1.png"))
+    {
+        std::cout << "Player image Loaded!" << std::endl;
+        enemy.setTexture(enemyTexture);
+    }
+    else
+    {
+       std::cout << "Player image failed to load!" << std::endl;
+    }
     
+    enemy.setPosition(200,500);
+    character.setPosition(100,200);
    
+
+    enemy1->setSprite(enemy);
+    player1.setSprite(character);
+
+    sf::Vector2u size =  player1.getSprite()->getTexture()->getSize();
+    std::cout << size.x << " " << size.y << std::endl;
     // run the program as long as the window is open
     while (window.isOpen())
     {
@@ -65,31 +78,115 @@ int main()
                 window.close();
             
         }
-        if(validIndex(character))
-        {
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
             {
-                character.move(0.f, -1.f);
+                Player copy("Copy", player1.getType(), player1.getMana());
+                sf::Sprite copySprite = *player1.getSprite();
+                copy.setSprite(copySprite);
+
+                copy.getSprite()->move(0.f, -1.f);
+
+                if(Movement::entityToEntity(copy,*enemy1) || Movement::entityToBounds(copy,window.getSize().x,window.getSize().y))
+                {
+                    cout << " No movement"<< endl;
+                }
+                else 
+                {
+                    cout << "movement"<< endl;
+                    player1.getSprite()->move(0.f, -1.f);
+                }
             }
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
             {
-                character.move(-1.f, 0.f);
+                Player copy("Copy", player1.getType(), player1.getMana());
+                sf::Sprite copySprite = *player1.getSprite();
+                copy.setSprite(copySprite);
+
+                copy.getSprite()->move(-1.f, 0.f);
+
+                if(Movement::entityToEntity(copy,*enemy1) || Movement::entityToBounds(copy,window.getSize().x,window.getSize().y))
+                {
+                    cout << " No movement"<< endl;
+                }
+                else 
+                {
+                    cout << "movement"<< endl;
+                    player1.getSprite()->move(-1.f, 0.f);
+                }
             }
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
             {
-                character.move(0.f, 1.f);
+                Player copy("Copy", player1.getType(), player1.getMana());
+                sf::Sprite copySprite = *player1.getSprite();
+                copy.setSprite(copySprite);
+
+                copy.getSprite()->move(0.f, 1.f);
+
+                if(Movement::entityToEntity(copy,*enemy1) || Movement::entityToBounds(copy,window.getSize().x,window.getSize().y))
+                {
+                    cout << " No movement"<< endl;
+                }
+                else 
+                {
+                    cout << "movement"<< endl;
+                    player1.getSprite()->move(0.f, 1.f);
+                }
             }
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
             {
-                character.move(1.f, 0.f);
-            }
-        }
-        
+                Player copy("Copy", player1.getType(), player1.getMana());
+                sf::Sprite copySprite = *player1.getSprite();
+                copy.setSprite(copySprite);
 
+                copy.getSprite()->move(1.f, 0.f);
+
+                if(Movement::entityToEntity(copy,*enemy1) || Movement::entityToBounds(copy,window.getSize().x,window.getSize().y))
+                {
+                    cout << " No movement"<< endl;
+                }
+                else 
+                {
+                    cout << "movement"<< endl;
+                    player1.getSprite()->move(1.f, 0.f);
+                }
+            }
+
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+                Player copy("Copy", player1.getType(), player1.getMana());
+                sf::Sprite copySprite = *player1.getSprite();
+                copy.setSprite(copySprite);
+
+                copy.getSprite()->move(1.f, 0.f);
+
+                if(Movement::entityToEntity(copy,*enemy1))
+                {
+                    player1.attack(player1,*enemy1);
+                    cout << player1.getHealth() << endl;
+                    cout << enemy1->getHealth() << endl;
+                }
+                else 
+                {
+                    cout << "missssss" << endl;
+                }
+            }
+        
         // clear the window with black color
         // draw section
         window.clear(sf::Color::Black);
-        window.draw(character);
+
+        window.draw(*player1.getSprite());
+
+        if(enemy1->getHealth() > 0)
+        {
+            window.draw(*enemy1->getSprite());
+        }
+        else
+        {
+            window.clear(sf::Color::Black);
+            window.draw(*player1.getSprite());
+        }
+
         window.display();
     }
 
