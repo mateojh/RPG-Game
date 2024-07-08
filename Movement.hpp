@@ -13,9 +13,9 @@ class Movement {
     public:
         
         static bool entityToBounds(Player &currentEntity, int x, int y);
-    
+        static bool entityToBounds(Enemy &currentEntity, int x, int y);
 
-        static bool entityToEntity(Player &entity1, Enemy &entity2);
+        static bool entityToEntity(Player &entity1, Enemy *entity2);
 
 };
 

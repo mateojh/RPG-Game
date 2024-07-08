@@ -10,7 +10,7 @@ class Enemy : public Entity
 {
     public:
 
-    Enemy(std::string userName, Type chosenType);          
+    Enemy(std::string userName, Type chosenType);
 };
  
 #endif
