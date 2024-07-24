@@ -12,5 +12,4 @@ class Enemy : public Entity
 
     Enemy(std::string userName, Type chosenType);
 };
- 
 #endif
